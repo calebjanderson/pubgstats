@@ -12,7 +12,7 @@ const options = {
       username: "PUBG_stat",
       password: "oauth:3vrlfyu2nu61tl9qzl1ovtrsymm7hm"
   },
-  channels: ['#welcometotheroost']
+  channels: ['#pubg_stat']
 };
 const client = new tmi.client(options);
 
@@ -36,6 +36,7 @@ client.on("chat", function (channel, userstate, message, self) {
       if(restOfWords.length === 1) {
         if(restOfWords[0] === 'help') {
           client.say(channel, 'You can specify what stats you want with the following syntax. [REGION] [QUEUE] [MODE] [ID]. Region, Queue, and Mode is optional.')
+          return
         }
 
         bot.search({ id: restOfWords[0] })
