@@ -1,0 +1,44 @@
+Twitchbot Specs
+Command List
+!pubgstats [REGION] [QUEUE] [MODE] [ID]
+Regions: AS, NA, EU, OCE, SA, SEA (not case sensitive, optional) If we include Region then it shows only that Region’s stats. If we don’t then it shows highest of all the Regions.
+Queue: Solo, Duo, Squad (not case sensitive, optional) If we include Queue then it shows only that Queue’s stats. If we don’t then it shows highest of all the Queue.
+Mode: FPP TPP (not case sensitive, optional). If we include mode then it shows only that modes stats. If we don’t then it shows highest of two.
+ID: Names (not case sensitive, required)
+Response ex:
+!pubgstats NA Solo NinjaKappa (Because TPP or FPP isn’t specified, it shows the higher of the 2 stats for NA Solo)
+Response - NinjaKappa - NA Solo FPP: rating 2,013,  rank #93, K/D 6.21, Avg Dmg 533.16 view more at http://www.pubg.net/player/ninjakappa (linkshortener?)
+!pubgstats Duo NinjaKappa (Because Region or Mode isn’t specified, it shows the highest Solo Rating of all Region and All Modes)
+Response - NinjaKappa - NA Duo TPP: rating 2,251,  rank #18, K/D 10.13, Avg Dmg 666.69 view more at http://www.pubg.net/player/ninjakappa
+Command List Matrix
+!pubgstats help
+“You can specify what stats you want with the following syntax. [REGION] [QUEUE] [MODE] [ID]. Region, Queue, and Mode is optional.”
+!pubgstats [ID]
+!pubgstats [QUEUE] [ID]
+!pubgstats [MODE] [ID]
+!pubgstats [REGION] [QUEUE] [ID]
+!pubgstats [REGION] [MODE] [ID]
+!pubgstats [QUEUE] [MODE]  [ID]
+!pubgstats [REGION] [QUEUE] [MODE] [ID]
+
+Logic
+Only [ID] is required. We allow user to specify [REGION], [QUEUE] & [MODE] optionally. If only [ID] is specified, we grab the absolute highest rating among all  [REGION], [QUEUE] & [MODE].
+
+If only [REGION] & [ID] is in the command prompt, we choose the highest rating from all [QUEUE] & [MODE] from the specified [REGION] & [ID].
+
+
+If only [QUEUE] & [ID] is in the command prompt, we choose the highest rating from all [REGION] & [MODE] from the specified [QUEUE] & [ID].
+
+If only [MODE] & [ID] is in the command prompt, we choose the highest rating from all [REGION] & [QUEUE] from the specified [MODE] & [ID].
+
+If [REGION] [QUEUE] [ID] is in the command prompt, we choose the highest rating from all [MODE] from the specified [REGION] [QUEUE] [ID].
+
+If [REGION] [MODE] [ID] is in the command prompt, we choose the highest rating from all [QUEUE] from the specified [REGION] [MODE] [ID]
+
+If [QUEUE] [MODE] [ID] is in the command prompt, we choose the highest rating from all [REGION] from the specified [QUEUE] [MODE] [ID]
+
+If [QUEUE] [MODE] [ID] is in the command prompt, we choose the highest rating from all [REGION] from the specified [QUEUE] [MODE] [ID]
+
+If [REGION] [QUEUE] [MODE] [ID] is in the command prompt, we choose the specific stat for that [REGION] [QUEUE] [MODE] [ID]
+
+

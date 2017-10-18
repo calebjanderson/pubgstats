@@ -1,0 +1,20 @@
+{
+  "name": "pubgstats",
+  "version": "1.0.0",
+  "description": "Twitch bot that queries pubg.net",
+  "main": "index.js",
+  "scripts": {
+    "test": "mocha --recursive test/"
+  },
+  "author": "Caleb Anderson",
+  "license": "ISC",
+  "dependencies": {
+    "axios": "^0.16.2",
+    "express": "^4.16.2",
+    "tmi.js": "^1.2.1"
+  },
+  "devDependencies": {
+    "chai": "^4.1.2",
+    "mocha": "^4.0.1"
+  }
+}
