@@ -1,16 +1,16 @@
 var assert = require('assert');
 var should = require('chai').should()
 var ex = require('../exampleResponse')
-console.log(ex)
 
 var bot = require('../../bot/bot')
 
-var idealResponse = 'NinjaKappa - NA Solo FPP: rating 2,013,  rank #93, K/D 6.21, Avg Dmg 533.16 view more at http://www.pubg.net/player/ninjakappa'
-
+var idealResponse = 'NinjaKappa - NA Solo FPP: rating 2,013, rank #93, K/D 6.21, Avg Dmg 533.17 view more at http://www.pubg.net/player/ninjakappa'
+var idealResponse2 = "NinjaKappa - NA Duo TPP: rating 2,251, rank #18, K/D 10.14, Avg Dmg 666.69 view more at http://www.pubg.net/player/ninjakappa"
+var idealResponse3 = "summit1g - NA Duo FPP: rating 2,208, rank #36, K/D 6.84, Avg Dmg 497.14 view more at http://www.pubg.net/player/summit1g"
 
 describe('!pubgstats', function() {
   describe("Regions - AS, NA, EU, OCE, SA, SEA (not case sensitive, optional) ", function() {
-    it("should show only selected Region’s stats.", async function() {
+    xit("should show only selected Region’s stats.", async function() {
       var response = await bot.search({ region: 'NA', id: 'NinjaKappa' })
 
       response.should.equal(idealResponse)
@@ -38,6 +38,33 @@ describe('!pubgstats', function() {
   describe('ID - Names (not case sensitive, required)', function() {
     it('should respond with missing id if no id provided', function() {
       bot.search({region: 'NA', queue: 'Solo', mode: 'FPP', id: null}).should.equal('missing id')
+    })
+    xit('should respond with max rating if all other fields are empty', async function() {
+      var response = await bot.search({id: 'NinjaKappa'})
+
+      response.should.equal(idealResponse)
+
+    })
+  })
+
+  describe('NinjaKappa queries - Check responses vs specs', function() {
+    it('should match the first ninjakappa query', async function() {
+      var response = await bot.search({region: 'NA', queue: 'Solo', id: 'NinjaKappa'})
+
+      response.should.equal(idealResponse)
+    })
+
+    it('should match the second ninjakappa query with only queue and id', async function() {
+      var response = await bot.search({ queue: 'Duo', id: 'NinjaKappa'})
+
+      response.should.equal(idealResponse2)
+    })
+
+    it('should match the second drdisrespect query with only queue and id', async function() {
+      var response = await bot.search({ id: 'summit1g' })
+
+      response.should.equal(idealResponse3)
+
     })
   })
 });
