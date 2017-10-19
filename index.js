@@ -1,5 +1,8 @@
+require('dotenv').config()
 const tmi = require('tmi.js');
 const bot = require('./bot/bot')
+
+//TMI.JS -- 
 const options = {
   options: {
     debug: true
@@ -9,14 +12,17 @@ const options = {
     secure: true
   },
   identity: {
-      username: "PUBG_stat",
-      password: "oauth:3vrlfyu2nu61tl9qzl1ovtrsymm7hm"
+      username: process.env.TWITCH_USERNAME,
+      password: process.env.TWITCH_PASSWORD
   },
   channels: ['#pubg_stat']
 };
 const client = new tmi.client(options);
+// Connect the client to the server..
+client.connect();
 
 /*
+EXAMPLE COMMANDS:
 
 !pubgstats [ID]
 !pubgstats [QUEUE] [ID]
@@ -29,13 +35,16 @@ const client = new tmi.client(options);
 
 */
 
+
+// OBJECT WITH VALID COMMANDS, GROUPED BY TYPE
 const commands = {
   queue: ['SOLO', 'DUO', 'SQUAD'],
   mode: ['FPP', 'TPP'],
   region: ['AS', 'NA', 'EU', 'OCE', 'SA', 'SEA'],
 }
 
-
+// EX: whatCommand('solo') => { type: 'queue', command: 'solo' }
+// EX: whatCommand('sols') => Error
 const whatCommand = function(word) {
   console.log('the word for command: ', word)
   for (var key in commands) {
@@ -46,8 +55,6 @@ const whatCommand = function(word) {
 
   return new Error('Invalid command')
 }
-// Connect the client to the server..
-client.connect();
 
 client.on("chat", function (channel, userstate, message, self) {
     // Don't listen to my own messages..
