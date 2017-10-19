@@ -12,16 +12,21 @@ module.exports = {
 
     return axios.get(serverurl + config.id + '/stats?season=2017-pre4' )
       .then((response) => {
-        var res = response.data
-        res.stats = res.stats.sort((a,b) => {
+        const res = response.data
+
+        //
+        // create res.sortedStats, an array of stats sorted by Rating
+        //
+        res.sortedStats = res.stats.sort((a,b) => {
           if(a.Rating > b.Rating) {
             return -1
           }
 
           return 1
         })
-        var stats = this.getRating(config, res)
-        var info = this.printRating(stats)
+
+        const stats = this.getRating(config, res)
+        const info = this.printRating(stats)
 
         if(!info) {
           return 'No stats for that search'
@@ -32,25 +37,25 @@ module.exports = {
 
   },
 
-  printRating: function(selected) {
-    if(!selected) {
+  printRating: function(info) {
+    if(!info) {
       return null
     }
 
     return {
-      rating: Number(Math.floor(selected.Rating)).toLocaleString(),
-      kd: selected.KillDeathRatio.toFixed(2),
-      rank: selected.LadderPosition,
-      avgDmg: selected.AverageDamagePerMatch.toFixed(2),
-      region: selected.Region,
-      queue: selected.Queue,
-      mode: selected.Perspective,
+      rating: Number(Math.floor(info.Rating)).toLocaleString(),
+      kd: info.KillDeathRatio.toFixed(2),
+      rank: info.LadderPosition,
+      avgDmg: info.AverageDamagePerMatch.toFixed(2),
+      region: info.Region,
+      queue: info.Queue,
+      mode: info.Perspective,
     }
   },
 
   getRating: function(config, res) {
     const { region, queue, mode, id } = config
-    const stats = res.stats
+    const stats = res.sortedStats
 
     //
     //  Filter based on provided config
@@ -59,7 +64,7 @@ module.exports = {
     if(!region && !queue && !mode) {
       //Get absolute highest rating between the 3 groups
 
-      return res.stats[0]
+      return stats[0]
     }
 
     if(region && !queue && !mode) {
@@ -70,31 +75,31 @@ module.exports = {
     }
 
     if(region && queue && !mode) {
-      var matchingRegionAndQueue = res.stats.filter(x => x.Region === region.toLowerCase() && x.Queue === queue.toLowerCase())
+      var matchingRegionAndQueue = stats.filter(x => x.Region === region.toLowerCase() && x.Queue === queue.toLowerCase())
 
       return matchingRegionAndQueue[0]
     }
 
     if(region && !queue && mode) {
-      var matchingRegionAndMode = res.stats.filter(x => x.Region === region.toLowerCase() && x.Perspective === mode.toLowerCase())
+      var matchingRegionAndMode = stats.filter(x => x.Region === region.toLowerCase() && x.Perspective === mode.toLowerCase())
 
       return matchingRegionAndMode[0]
     }
 
     if(!region && queue && !mode) {
-      var matchingQueue = res.stats.filter(x => x.Queue === queue.toLowerCase())
+      var matchingQueue = stats.filter(x => x.Queue === queue.toLowerCase())
 
       return matchingQueue[0]
     }
 
     if(!region && !queue && mode) {
-      var matchingMode = res.stats.filter(x => x.Perspective === mode.toLowerCase())
+      var matchingMode = stats.filter(x => x.Perspective === mode.toLowerCase())
 
       return matchingMode[0]
     }
 
     if(region && mode && queue) {
-      var mathingAll = res.stats.filter(x => x.Region === region.toLowerCase() && x.Perspective === mode.toLowerCase() && x.Queue === queue.toLowerCase())
+      var mathingAll = stats.filter(x => x.Region === region.toLowerCase() && x.Perspective === mode.toLowerCase() && x.Queue === queue.toLowerCase())
 
       return mathingAll[0]
     }
