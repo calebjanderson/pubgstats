@@ -9,6 +9,34 @@ Connects to twitch chat with help from a pretty cool library [tmi.js](https://ww
 
 See [specs](specs.txt) for design details
 
+## Usage
+
+Visit https://www.twitch.tv/pubg_stat
+
+### Example Commands
+All commands must begin with `!pubgstats ` for the bot to respond
+
+Only required parameter is **id** aka in-game name (ex: NinjaKappa, summit1g)
+
+```
+!pubgstats [ID]
+!pubgstats [QUEUE] [ID]
+!pubgstats [MODE] [ID]
+!pubgstats [REGION] [QUEUE] [ID]
+!pubgstats [REGION] [MODE] [ID]
+!pubgstats [QUEUE] [MODE]  [ID]
+!pubgstats [REGION] [QUEUE] [MODE] [ID]
+```
+Valid types - casing should not matter
+
+```
+{
+  queue: ['SOLO', 'DUO', 'SQUAD'],
+  mode: ['FPP', 'TPP'],
+  region: ['AS', 'NA', 'EU', 'OCE', 'SA', 'SEA'],
+}
+```
+
 ## Getting Started
 
 To setup you need [node](https://www.nodejs.org) >= v8.0.0 on your computer
