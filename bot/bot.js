@@ -6,6 +6,10 @@ module.exports = {
     const { region, queue, mode, id } = config
 
     console.log('[DEV] - Search config: ', config)
+
+    //
+    // Early return if no id is defined
+    //
     if(!id) {
       return 'missing id'
     }
@@ -17,7 +21,7 @@ module.exports = {
         //
         // create res.sortedStats, an array of stats sorted by Rating
         //
-        res.sortedStats = res.stats.sort((a,b) => {
+        const sortedStats = res.stats.sort((a,b) => {
           if(a.Rating > b.Rating) {
             return -1
           }
@@ -25,12 +29,19 @@ module.exports = {
           return 1
         })
 
-        const stats = this.getRating(config, res)
+        const stats = this.getRating(config, sortedStats)
         const info = this.printRating(stats)
 
+        //
+        // Check if stats exist for that search
+        //
         if(!info) {
           return 'No stats for that search'
         }
+
+        //
+        // If we get to this point we should have valid info to stringify and send to chat
+        //
         return `${res.profile.Nickname} - ${info.region.toUpperCase()} ${info.queue[0].toUpperCase() + info.queue.slice(1).toLowerCase()} ${info.mode.toUpperCase()}: rating ${info.rating}, rank #${info.rank}, K/D ${info.kd}, Avg Dmg ${info.avgDmg} view more at http://www.pubg.net/player/${res.profile.Nickname.toLowerCase()}`
       })
 
@@ -52,45 +63,44 @@ module.exports = {
     }
   },
 
-  getRating: function(config, res) {
+  getRating: function(config, stats) {
     const { region, queue, mode } = config
-    const stats = res.sortedStats
 
     //
     // Filter based on provided config
     //
+    const filteredStats = this.filterStatsBy({region, mode, queue}, stats)
 
+    return filteredStats[0]
+  },
 
+  filterStatsBy: function(config, stats) {
+    const { region, queue, mode } = config
 
-    return filterStatsBy({region, mode, queue}, stats)[0]
-  }
-}
+    //
+    // Early return if no filters
+    //
+    if(!region && !mode && !queue) return stats
 
-
-function filterStatsBy(config, stats) {
-  const { region, mode, queue } = config
-
-  if(!region && !mode && !queue) return stats
-
-  const filters = {
-    region: (obj) => obj.Region === region.toLowerCase(),
-    mode: (obj) => obj.Perspective === mode.toLowerCase(),
-    queue: (obj) => obj.Queue === queue.toLowerCase(),
-  }
-
-  return stats.filter(x => {
-    let condition = ''
-    for(var key in config) {
-      if(config[key]) {
-        if(condition.length === 0) {
-          condition += filters[key](x)
-        } else {
-          condition += ` && ${filters[key](x)}`
-        }
-      }
+    const filters = {
+      region: (obj) => obj.Region === region.toLowerCase(),
+      mode: (obj) => obj.Perspective === mode.toLowerCase(),
+      queue: (obj) => obj.Queue === queue.toLowerCase(),
     }
 
-    return eval(condition)
-  })
+    return stats.filter(x => {
+      let condition = ''
+      for(let key in config) {
+        if(config[key]) {
+          if(condition.length === 0) {
+            condition += filters[key](x)
+          } else {
+            condition += ` && ${filters[key](x)}`
+          }
+        }
+      }
 
+      return eval(condition)
+    })
+  }
 }
