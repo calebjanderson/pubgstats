@@ -2,7 +2,7 @@ require('dotenv').config()
 const tmi = require('tmi.js');
 const bot = require('./bot/bot')
 
-//TMI.JS -- 
+//TMI.JS -- https://docs.tmijs.org/v1.2.1/Configuration.html
 const options = {
   options: {
     debug: true
@@ -17,7 +17,10 @@ const options = {
   },
   channels: ['#pubg_stat']
 };
+
+
 const client = new tmi.client(options);
+
 // Connect the client to the server..
 client.connect();
 
@@ -43,10 +46,13 @@ const commands = {
   region: ['AS', 'NA', 'EU', 'OCE', 'SA', 'SEA'],
 }
 
+//
+// whatCommand taks in a string and checks to
+//. see if it is valid command by referring to the commands object above
+//
 // EX: whatCommand('solo') => { type: 'queue', command: 'solo' }
 // EX: whatCommand('sols') => Error
 const whatCommand = function(word) {
-  console.log('the word for command: ', word)
   for (var key in commands) {
     if(commands[key].includes(word.toUpperCase())) {
       return { type: key, command: word }
@@ -58,32 +64,23 @@ const whatCommand = function(word) {
 
 client.on("chat", function (channel, userstate, message, self) {
     // Don't listen to my own messages..
-    if (self) return;
-    /*
-
-    !pubgstats [ID]
-    !pubgstats [QUEUE] [ID]
-    !pubgstats [MODE] [ID]
-    !pubgstats [REGION] [QUEUE] [ID]
-    !pubgstats [REGION] [MODE] [ID]
-    !pubgstats [QUEUE] [MODE]  [ID]
-    !pubgstats [REGION] [QUEUE] [MODE] [ID]
-
-
-    */
+    if (self) return
 
     var splitMsg = message.split(' ')
     var firstWord = splitMsg[0]
     var restOfWords = splitMsg.slice(1)
 
-    // Do your stuff.
+    //
+    // Only if the first word equals exactly '!pubgstats' enter logic for rest of command parsing
+    //
     if(firstWord === '!pubgstats') {
       if(!restOfWords[0] || restOfWords.length > 4) {
-        client.say(channel, 'Invalid command: try `!pubgstats help`')
+        client.say(channel, 'Invalid command: try "!pubgstats help"')
       }
 
       //Only one argument: assume player id
       if(restOfWords.length === 1) {
+
         if(restOfWords[0] === 'help') {
           client.say(channel, 'You can specify what stats you want with the following syntax. [REGION] [QUEUE] [MODE] [ID]. Region, Queue, and Mode is optional.')
           return
@@ -94,7 +91,7 @@ client.on("chat", function (channel, userstate, message, self) {
             client.say(channel, result)
           })
           .catch((err) => {
-            client.say(channel, 'Invalid command: try `!pubgstats help`')
+            client.say(channel, 'Invalid command: try "!pubgstats help"')
           })
       }
 
@@ -109,7 +106,7 @@ client.on("chat", function (channel, userstate, message, self) {
             client.say(channel, result)
           })
           .catch((err) => {
-            client.say(channel, 'Invalid command: try `!pubgstats help`')
+            client.say(channel, 'Invalid command: try "!pubgstats help"')
           })
       }
 
@@ -133,7 +130,7 @@ client.on("chat", function (channel, userstate, message, self) {
               client.say(channel, result)
             })
             .catch((err) => {
-              client.say(channel, 'Invalid command: try `!pubgstats help`')
+              client.say(channel, 'Invalid command: try "!pubgstats help"')
             })
         }
       }
@@ -159,7 +156,7 @@ client.on("chat", function (channel, userstate, message, self) {
               client.say(channel, result)
             })
             .catch((err) => {
-              client.say(channel, 'Invalid command: try `!pubgstats help`')
+              client.say(channel, 'Invalid command: try "!pubgstats help"')
             })
         }
       }
