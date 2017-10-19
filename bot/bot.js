@@ -36,6 +36,7 @@ module.exports = {
     if(!selected) {
       return null
     }
+
     return {
       rating: Number(Math.floor(selected.Rating)).toLocaleString(),
       kd: selected.KillDeathRatio.toFixed(2),
@@ -51,6 +52,10 @@ module.exports = {
     const { region, queue, mode, id } = config
     const stats = res.stats
 
+    //
+    //  Filter based on provided config
+    //
+
     if(!region && !queue && !mode) {
       //Get absolute highest rating between the 3 groups
 
@@ -59,35 +64,32 @@ module.exports = {
 
     if(region && !queue && !mode) {
       //Get highest from all modes and queues but only from region
-
       var matchingRegion = stats.filter(x => x.Region === region.toLowerCase())
-      console.log(matchingRegion[0])
+
       return matchingRegion[0]
     }
 
     if(region && queue && !mode) {
-      var selected = res.queues[queue.toLowerCase()]
       var matchingRegionAndQueue = res.stats.filter(x => x.Region === region.toLowerCase() && x.Queue === queue.toLowerCase())
-      return selected
 
+      return matchingRegionAndQueue[0]
     }
 
     if(region && !queue && mode) {
-      var max = {Rating: 0}
       var matchingRegionAndMode = res.stats.filter(x => x.Region === region.toLowerCase() && x.Perspective === mode.toLowerCase())
+
       return matchingRegionAndMode[0]
     }
 
     if(!region && queue && !mode) {
-      var selected = res.queues[queue.toLowerCase()]
       var matchingQueue = res.stats.filter(x => x.Queue === queue.toLowerCase())
-      console.log('should be here, looking for : ', queue)
+
       return matchingQueue[0]
     }
 
     if(!region && !queue && mode) {
       var matchingMode = res.stats.filter(x => x.Perspective === mode.toLowerCase())
-      console.log('should be here, looking for mode : ', mode)
+
       return matchingMode[0]
     }
 
