@@ -10,10 +10,10 @@ var idealResponse3 = "summit1g - NA Duo FPP: rating 2,208, rank #36, K/D 6.84, A
 
 describe('!pubgstats', function() {
   describe("Regions - AS, NA, EU, OCE, SA, SEA (not case sensitive, optional) ", function() {
-    xit("should show only selected Region’s stats.", async function() {
+    it("should show only selected Region’s stats.", async function() {
       var response = await bot.search({ region: 'NA', id: 'NinjaKappa' })
 
-      response.should.equal(idealResponse)
+      response.should.equal(idealResponse2)
     });
     xit("should show highest of all the Regions by default.", function() {
 
