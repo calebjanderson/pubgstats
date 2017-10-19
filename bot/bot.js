@@ -27,12 +27,10 @@ module.exports = {
 
         const stats = this.getRating(config, res)
         const info = this.printRating(stats)
-        console.log('info: ', info, !info)
+
         if(!info) {
-          console.log('sending no stats')
           return 'No stats for that search'
         }
-
         return `${res.profile.Nickname} - ${info.region.toUpperCase()} ${info.queue[0].toUpperCase() + info.queue.slice(1).toLowerCase()} ${info.mode.toUpperCase()}: rating ${info.rating}, rank #${info.rank}, K/D ${info.kd}, Avg Dmg ${info.avgDmg} view more at http://www.pubg.net/player/${res.profile.Nickname.toLowerCase()}`
       })
 
@@ -62,9 +60,9 @@ module.exports = {
     // Filter based on provided config
     //
 
-    var filteredStats = filterStatsBy({region, mode, queue}, stats)
 
-    return filteredStats[0]
+
+    return filterStatsBy({region, mode, queue}, stats)[0]
   }
 }
 
@@ -73,6 +71,7 @@ function filterStatsBy(config, stats) {
   const { region, mode, queue } = config
 
   if(!region && !mode && !queue) return stats
+
   const filters = {
     region: (obj) => obj.Region === region.toLowerCase(),
     mode: (obj) => obj.Perspective === mode.toLowerCase(),
