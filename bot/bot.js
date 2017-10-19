@@ -27,8 +27,9 @@ module.exports = {
 
         const stats = this.getRating(config, res)
         const info = this.printRating(stats)
-
+        console.log('info: ', info, !info)
         if(!info) {
+          console.log('sending no stats')
           return 'No stats for that search'
         }
 
@@ -54,55 +55,43 @@ module.exports = {
   },
 
   getRating: function(config, res) {
-    const { region, queue, mode, id } = config
+    const { region, queue, mode } = config
     const stats = res.sortedStats
 
     //
-    //  Filter based on provided config
+    // Filter based on provided config
     //
 
-    if(!region && !queue && !mode) {
-      //Get absolute highest rating between the 3 groups
+    var filteredStats = filterStatsBy({region, mode, queue}, stats)
 
-      return stats[0]
-    }
-
-    if(region && !queue && !mode) {
-      //Get highest from all modes and queues but only from region
-      var matchingRegion = stats.filter(x => x.Region === region.toLowerCase())
-
-      return matchingRegion[0]
-    }
-
-    if(region && queue && !mode) {
-      var matchingRegionAndQueue = stats.filter(x => x.Region === region.toLowerCase() && x.Queue === queue.toLowerCase())
-
-      return matchingRegionAndQueue[0]
-    }
-
-    if(region && !queue && mode) {
-      var matchingRegionAndMode = stats.filter(x => x.Region === region.toLowerCase() && x.Perspective === mode.toLowerCase())
-
-      return matchingRegionAndMode[0]
-    }
-
-    if(!region && queue && !mode) {
-      var matchingQueue = stats.filter(x => x.Queue === queue.toLowerCase())
-
-      return matchingQueue[0]
-    }
-
-    if(!region && !queue && mode) {
-      var matchingMode = stats.filter(x => x.Perspective === mode.toLowerCase())
-
-      return matchingMode[0]
-    }
-
-    if(region && mode && queue) {
-      var mathingAll = stats.filter(x => x.Region === region.toLowerCase() && x.Perspective === mode.toLowerCase() && x.Queue === queue.toLowerCase())
-
-      return mathingAll[0]
-    }
-
+    return filteredStats[0]
   }
+}
+
+
+function filterStatsBy(config, stats) {
+  const { region, mode, queue } = config
+
+  if(!region && !mode && !queue) return stats
+  const filters = {
+    region: (obj) => obj.Region === region.toLowerCase(),
+    mode: (obj) => obj.Perspective === mode.toLowerCase(),
+    queue: (obj) => obj.Queue === queue.toLowerCase(),
+  }
+
+  return stats.filter(x => {
+    let condition = ''
+    for(var key in config) {
+      if(config[key]) {
+        if(condition.length === 0) {
+          condition += filters[key](x)
+        } else {
+          condition += ` && ${filters[key](x)}`
+        }
+      }
+    }
+
+    return eval(condition)
+  })
+
 }
