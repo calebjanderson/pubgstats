@@ -15,23 +15,23 @@ describe('!pubgstats', function() {
 
       response.should.equal(idealResponse)
     });
-    it("should show highest of all the Regions by default.", function() {
+    xit("should show highest of all the Regions by default.", function() {
 
     })
   });
   describe('Queue - Solo, Duo, Squad (not case sensitive, optional)', function() {
-    it('should only show stats for selected Queue', function() {
+    xit('should only show stats for selected Queue', function() {
       assert.equal(-1, [1,2,3].indexOf(4));
     });
-    it('should show highest Queue if none is provided', function() {
+    xit('should show highest Queue if none is provided', function() {
 
     })
   });
   describe('Mode - FPP TPP (not case sensitive, optional). ', function() {
-    it('should show only stats for selected mode', function() {
+    xit('should show only stats for selected mode', function() {
 
     })
-    it('should show highest score if none provided', function() {
+    xit('should show highest score if none provided', function() {
 
     })
   })
@@ -39,11 +39,10 @@ describe('!pubgstats', function() {
     it('should respond with missing id if no id provided', function() {
       bot.search({region: 'NA', queue: 'Solo', mode: 'FPP', id: null}).should.equal('missing id')
     })
-    xit('should respond with max rating if all other fields are empty', async function() {
+    it('should respond with max rating if all other fields are empty', async function() {
       var response = await bot.search({id: 'NinjaKappa'})
 
-      response.should.equal(idealResponse)
-
+      response.should.equal(idealResponse2)
     })
   })
 
@@ -64,7 +63,6 @@ describe('!pubgstats', function() {
       var response = await bot.search({ id: 'summit1g' })
 
       response.should.equal(idealResponse3)
-
     })
   })
 });
