@@ -1,17 +1,17 @@
 # !pubgstats
 Bot that talks about the game PLAYERUNKNOWN'S BATTLEGROUNDS (aka [pubg](https://www.playbattlegrounds.com))
 
-Designed for use in [twitch](twitch.tv) chat
+Designed for use in [twitch](https://www.twitch.tv) chat
 
-Responds with player data from [pubg.net](pubg.net)
+Responds with player data from [pubg.net](http://www.pubg.net)
 
-Connects to twitch chat with help from a pretty cool library [tmi.js](docs.tmijs.org)
+Connects to twitch chat with help from a pretty cool library [tmi.js](https://www.docs.tmijs.org)
 
 See [specs](specs.txt) for design details
 
 ## Getting Started
 
-To setup you need [node](nodejs.org) >= v8.0.0 on your computer
+To setup you need [node](https://www.nodejs.org) >= v8.0.0 on your computer
 
 Run `npm install` at the top level of this directory
 
