@@ -9,10 +9,6 @@ module.exports = {
     if(!id) {
       return 'missing id'
     }
-    if(!region && !queue && !mode) {
-
-    }
-
 
     return axios.get(serverurl + config.id + '/stats?season=2017-pre4' )
       .then((response) => {
