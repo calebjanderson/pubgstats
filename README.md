@@ -7,7 +7,7 @@ Responds with player data from [pubg.net](pubg.net)
 
 Connects to twitch chat with help from a pretty cool library [tmi.js](docs.tmijs.org)
 
-See [specs](specs.text) for design details
+See [specs](specs.txt) for design details
 
 ## Getting Started
 
